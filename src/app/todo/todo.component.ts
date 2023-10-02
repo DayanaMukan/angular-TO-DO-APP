@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {TaskStorageService} from "../task-storage.service";
-import {Task} from "../shared/models/task.model";
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { TaskStorageService } from '../task-storage.service';
+import { Task } from '../shared/models/task.model';
 
 @Component({
   selector: 'app-todo',
@@ -8,26 +9,28 @@ import {Task} from "../shared/models/task.model";
   styleUrls: ['./todo.component.css']
 })
 export class TodoComponent implements OnInit {
-
   tasks: Task[];
+  difficulty = new FormControl('');
 
-  constructor(private storage: TaskStorageService) {
-  }
+  items: string[] = ['Выберите число', '1', '2', '3', '4', '5'];
 
-  /**
-   * Load tasks on init
-   */
-  ngOnInit() : void{
+  constructor(private storage: TaskStorageService) {}
+
+  ngOnInit(): void {
     this.storage.init();
     this.tasks = this.storage.getTasks();
   }
 
-  /**
-   * Remove the tasks from the list
-   *
-   * @param id task index to remove
-   */
-  delete(id): void {
+  stars(difficulty: number): string {
+    if (difficulty === 1) return '★';
+    else if (difficulty === 2) return '★★';
+    else if (difficulty === 3) return '★★★';
+    else if (difficulty === 4) return '★★★★';
+    else if (difficulty === 5) return '★★★★★';
+    else return '';
+  }
+
+  delete(id: number): void {
     this.storage.delete(id);
     this.tasks = this.storage.getTasks();
   }
